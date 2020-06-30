@@ -3,11 +3,15 @@ const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 const client = new net.Socket()
 
+const STE_COM = 'COM1'
+const DEV_SERVER = '192.168.1.188'
+const PORTNUM = 1337
+
 const sprl = SerialPort.parsers.Readline
 const parser = new Readline()
 
 
-const port = new SerialPort('COM13', function(err) {
+const port = new SerialPort(STE_COM, function(err) {
 	if(err) {
 		return console.log('Error: ', err.message)
 	}
@@ -29,7 +33,7 @@ parser.on('data', console.log)
 	err => console.error(err)
 )*/
 
-client.connect(1337, '192.168.1.161', function() {
+client.connect(PORTNUM, DEV_SERVER, function() {
 	console.log('Client Connected!')
 })
 
