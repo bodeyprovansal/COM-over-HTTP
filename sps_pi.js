@@ -1,27 +1,36 @@
+const net = require('net')
 const SerialPort = require('serialport')
-const port = new SerialPort('/dev/ttyUSB0', {
+const Readline = require('@serialport/parser-readline')
+
+const port = new SerialPort('/dev/ttyUSB0', () => {
 	baudRate: 9600
+	console.log('Connection Made to device at: ' + port.path)
 })
 
-port.write('up', function(err) {
-  if(err) {
-    return console.log('Error on write: ', err.message)
-  }
-  console.log('message written')
-})
+const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+parser.on('data', console.log)
+
+const server = net.createServer(function(socket) {
+  console.log('server: tcp server started')
+
+  socket.on('data', function(data) {
+    console.log('server: ' + data + ' from ' + socket.remoteAddress + ':'
+	          + socket.remotePort)
+    socket.write('server repeating: ' + data)
+  })
+
+  socket.on('close', function() {
+    console.log('server: client closed connection')
+  })
   
-port.on('error', function(err) {
-  console.log('Error from device: ', err.message)
+  socket.write('Echo server\r\n')
+  socket.pipe(socket)
+  socket.pipe(port)
 })
 
-port.on('readable', function() {
-  console.log('Data: ', port.read())
-})
-port.on('data', function(data) {
-  console.log('Data:', data)
-})
+server.listen(1337, '127.0.0.1')
 
-const lineStream = port.pipe(new Readline())
+//port.pipe(parser)
+//parser.on('data', console.log)
+port.write('\r')
 
-port.write('stop')
-port.write('version')
