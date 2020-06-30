@@ -1,0 +1,17 @@
+{
+  "name": "serialport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sp.js",
+  "dependencies": {
+    "remote-serial-port-client": "^0.4.0",
+    "serialport": "^9.0.0",
+    "tcp-serial": "^0.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
