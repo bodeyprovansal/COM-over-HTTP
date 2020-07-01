@@ -25,7 +25,7 @@ port.open(function (err) {
 		return console.log('Error opening port: ', err.message)
 	}
 })
-port.on('data', port.pipe(parser))
+
 //port.pipe(parser)
 //parser.on('data', console.log)
 
@@ -56,7 +56,7 @@ client.on('connect', function() {
 })
 
 client.on('data', function(data) {
-	console.log('Client Received: ' + data.toString().trim())
+	console.log(data.toString().trim())
 	port.write(data.toString())
 	//client.destroy()
 })
