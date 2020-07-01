@@ -12,7 +12,7 @@ const port = new SerialPort('/dev/ttyUSB0', () => {
 
 port.on('open', console.log)
 
-const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+const parser = port.pipe(new Readline({ delimiter: '\r' }))
 parser.on('data', console.log)
 
 const server = net.createServer(function(socket) {
