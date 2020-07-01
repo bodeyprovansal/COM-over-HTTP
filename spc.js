@@ -8,7 +8,7 @@ const DEV_SERVER = '192.168.1.188'
 const PORTNUM = 1337
 
 const sprl = SerialPort.parsers.Readline
-const parser = new Readline()
+const parser = new Readline({ delimiter: '\r\n' })
 
 
 const port = new SerialPort(STE_COM, function(err) {
@@ -16,6 +16,7 @@ const port = new SerialPort(STE_COM, function(err) {
 		return console.log('Error: ', err.message)
 	}
 	baudRate: 9600
+        client.write('\r')
 	console.log('Connection established to port: ' + port.path)
 })
 
@@ -24,9 +25,13 @@ port.open(function (err) {
 		return console.log('Error opening port: ', err.message)
 	}
 })
+port.on('data', port.pipe(parser))
+//port.pipe(parser)
+//parser.on('data', console.log)
 
-port.pipe(parser)
-parser.on('data', console.log)
+parser.on('data', function(data) {
+  client.write(data)
+})
 
 /*SerialPort.list().then(
 	ports => ports.forEach(console.log),
@@ -52,6 +57,7 @@ client.on('connect', function() {
 
 client.on('data', function(data) {
 	console.log('Client Received: ' + data.toString().trim())
+	port.write(data.toString())
 	//client.destroy()
 })
 

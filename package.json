@@ -4,6 +4,7 @@
   "description": "",
   "main": "sp.js",
   "dependencies": {
+    "bindings": "^1.5.0",
     "readline": "^1.3.0",
     "remote-serial-port-client": "^0.4.0",
     "serialport": "^9.0.0",
